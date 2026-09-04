@@ -12,19 +12,35 @@
     { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
     { "open": "(", "close": ")" },
-    { "open": "\"", "close": "\"" }
+    { "open": "\"", "close": "\"" },
+    { "open": "'", "close": "'", "notIn": ["string"] }
   ],
   "surroundingPairs": [
     ["{", "}"],
     ["[", "]"],
     ["(", ")"],
-    ["\"", "\""]
+    ["\"", "\""],
+    ["'", "'"]
   ],
   "indentationRules": {
-    "increaseIndentPattern": "^.+:\\s*$",
+    "increaseIndentPattern": "^(?:[^\"#]*\"[^\"]*\")*[^\"#]*:\\s*(?:#.*)?$",
     "decreaseIndentPattern": "^\\s*(else|else if)\\b"
   },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*(?:stop(?: trigger| loop)?|exit(?: \\d+ (?:sections?|loops?)| all (?:sections|loops)| loop| section| trigger)?|cancel(?: the)? event|return\\b.*?)\\s*(?:#.*)?$",
+      "action": { "indent": "outdent" }
+    },
+    {
+      "beforeText": "^(?:[^\"#]*\"[^\"]*\")*[^\"#]*:\\s*(?:#.*)?$",
+      "action": { "indent": "indent" }
+    }
+  ],
   "folding": {
-    "offSide": true
+    "offSide": true,
+    "markers": {
+      "start": "^\\s*#!FOLD\\b",
+      "end": "^\\s*#!UNFOLD\\b"
+    }
   }
 }

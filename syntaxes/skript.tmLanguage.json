@@ -10,13 +10,25 @@
       "include": "#mc-hex-toplevel"
     },
     {
+      "include": "#doc-comment"
+    },
+    {
       "include": "#comment"
+    },
+    {
+      "include": "#aliases-block"
+    },
+    {
+      "include": "#variables-block"
     },
     {
       "include": "#top-section"
     },
     {
       "include": "#section-property"
+    },
+    {
+      "include": "#ending-word"
     },
     {
       "include": "#option-ref"
@@ -31,58 +43,13 @@
       "include": "#variable-global"
     },
     {
-      "include": "#mc-ampersand-escape"
+      "include": "#mc-codes"
     },
     {
-      "include": "#mc-black"
+      "include": "#builtin-value"
     },
     {
-      "include": "#mc-dark-blue"
-    },
-    {
-      "include": "#mc-dark-green"
-    },
-    {
-      "include": "#mc-dark-aqua"
-    },
-    {
-      "include": "#mc-dark-red"
-    },
-    {
-      "include": "#mc-dark-purple"
-    },
-    {
-      "include": "#mc-gold"
-    },
-    {
-      "include": "#mc-gray"
-    },
-    {
-      "include": "#mc-dark-gray"
-    },
-    {
-      "include": "#mc-blue"
-    },
-    {
-      "include": "#mc-green"
-    },
-    {
-      "include": "#mc-aqua"
-    },
-    {
-      "include": "#mc-red"
-    },
-    {
-      "include": "#mc-light-purple"
-    },
-    {
-      "include": "#mc-yellow"
-    },
-    {
-      "include": "#mc-white"
-    },
-    {
-      "include": "#mc-format"
+      "include": "#function-call"
     },
     {
       "include": "#control-flow"
@@ -111,14 +78,41 @@
   ],
   "repository": {
     "comment": {
+      "comment": "Line comment. `<#RRGGBB>` / `<##RRGGBB>` hex tags are not comments.",
       "name": "comment.line.number-sign.skript",
-      "match": "#(?!#[0-9a-fA-F]{6}).*$"
+      "match": "#(?!#?[0-9a-fA-F]{6}>).*$"
+    },
+    "doc-comment": {
+      "comment": "Function doc-comments: #d description, #dp name text, #dr return, #dex example, #ddep deprecated",
+      "patterns": [
+        {
+          "match": "^\\s*(#dp)\\s+(\\S+)(.*)$",
+          "name": "comment.line.documentation.skript",
+          "captures": {
+            "1": {
+              "name": "keyword.other.documentation.skript"
+            },
+            "2": {
+              "name": "variable.parameter.documentation.skript"
+            }
+          }
+        },
+        {
+          "match": "^\\s*(#(?:d|dr|dex|ddep))(?=\\s|$).*$",
+          "name": "comment.line.documentation.skript",
+          "captures": {
+            "1": {
+              "name": "keyword.other.documentation.skript"
+            }
+          }
+        }
+      ]
     },
     "mc-hex-toplevel": {
       "patterns": [
         {
           "name": "constant.character.escape.hex.skript",
-          "match": "<##[0-9a-fA-F]{6}>"
+          "match": "<##?[0-9a-fA-F]{6}>"
         },
         {
           "name": "constant.character.escape.hex.skript",
@@ -131,6 +125,30 @@
         {
           "comment": "on <event>:",
           "match": "^(on)\\s+(.+?)(?=\\s*:)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.event.skript"
+            },
+            "2": {
+              "name": "entity.name.type.event.skript"
+            }
+          }
+        },
+        {
+          "comment": "at <time>:",
+          "match": "^(at)\\s+(\\d{1,2}:\\d{2}(?:\\s*(?:am|pm))?)(?=\\s*:)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.event.skript"
+            },
+            "2": {
+              "name": "entity.name.type.event.skript"
+            }
+          }
+        },
+        {
+          "comment": "every <duration>:",
+          "match": "^(every)\\s+(.+?)(?=\\s*:)",
           "captures": {
             "1": {
               "name": "keyword.control.event.skript"
@@ -156,8 +174,8 @@
           }
         },
         {
-          "comment": "function name(params):",
-          "match": "^(function)\\s+(\\w+)(\\([^)]*\\))",
+          "comment": "function name(params) [:: return type]:",
+          "match": "^(function)\\s+(\\w+)(\\([^)]*\\))(?:\\s*(::)\\s*([^:]+?))?(?=\\s*:)",
           "captures": {
             "1": {
               "name": "keyword.other.function-def.skript"
@@ -167,6 +185,12 @@
             },
             "3": {
               "name": "variable.parameter.skript"
+            },
+            "4": {
+              "name": "keyword.operator.return-type.skript"
+            },
+            "5": {
+              "name": "support.type.return.skript"
             }
           }
         },
@@ -181,12 +205,147 @@
         }
       ]
     },
+    "aliases-block": {
+      "comment": "aliases: block; `name = items` entries until the next column-0 line",
+      "begin": "^(aliases)\\s*:",
+      "end": "^(?=[^\\s#])",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.section.skript"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#doc-comment"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "match": "^\\s+([^=#]+?)\\s*(=)\\s*(.*)$",
+          "captures": {
+            "1": {
+              "name": "variable.other.alias.skript",
+              "patterns": [
+                {
+                  "include": "#str-expression"
+                }
+              ]
+            },
+            "2": {
+              "name": "keyword.operator.assignment.skript"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "include": "#comment"
+                },
+                {
+                  "include": "#string"
+                },
+                {
+                  "include": "#number"
+                },
+                {
+                  "include": "#boolean"
+                },
+                {
+                  "include": "#variable-local"
+                },
+                {
+                  "include": "#variable-global"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "variables-block": {
+      "comment": "variables: block; `name = default` entries until the next column-0 line",
+      "begin": "^(variables)\\s*:",
+      "end": "^(?=[^\\s#])",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.section.skript"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#doc-comment"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "match": "^\\s+([^=#]+?)\\s*(=)\\s*(.*)$",
+          "captures": {
+            "1": {
+              "name": "variable.other.default.skript",
+              "patterns": [
+                {
+                  "include": "#str-expression"
+                }
+              ]
+            },
+            "2": {
+              "name": "keyword.operator.assignment.skript"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "include": "#comment"
+                },
+                {
+                  "include": "#string"
+                },
+                {
+                  "include": "#number"
+                },
+                {
+                  "include": "#boolean"
+                },
+                {
+                  "include": "#variable-local"
+                },
+                {
+                  "include": "#variable-global"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
     "section-property": {
       "comment": "Command/function property keywords. Longer variants before shorter to avoid partial match.",
       "match": "^\\s+(permission message|permission bypass|permission|cooldown message|cooldown bypass|cooldown storage|cooldown|executable by|default value|trigger|aliases|usage|description)\\s*:",
       "captures": {
         "1": {
           "name": "support.type.property.skript"
+        }
+      }
+    },
+    "ending-word": {
+      "comment": "Statements that end a trigger, loop or section (GRAMMAR.md 'ending words')",
+      "match": "^\\s*(stop(?: trigger| loop)?|exit(?: \\d+ (?:sections?|loops?)| all (?:sections|loops)| loop| section| trigger)?|cancel(?: the)? event|return)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.control.flow.end.skript"
+        }
+      }
+    },
+    "builtin-value": {
+      "comment": "Built-in value references: loop-*, arg-*, event-*, and the bare event actors",
+      "name": "variable.language.skript",
+      "match": "\\b(loop-[a-z]+(?:-\\d+)?|arg-(?:\\d+|[a-z]+)|arguments?|event-[a-z]+(?:-[a-z]+)*|player|victim|attacker|shooter|sender|console)\\b"
+    },
+    "function-call": {
+      "comment": "name( — a call site; definitions are already scoped by #top-section",
+      "match": "(?<!function\\s)\\b([A-Za-z_]\\w*)(?=\\()",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.call.skript"
         }
       }
     },
@@ -217,8 +376,101 @@
           "include": "#str-variable-global"
         },
         {
+          "include": "#str-percent-escape"
+        },
+        {
           "include": "#str-expression"
         },
+        {
+          "include": "#mc-hex-toplevel"
+        },
+        {
+          "include": "#mc-codes"
+        }
+      ]
+    },
+    "str-option": {
+      "name": "constant.other.option.skript",
+      "match": "\\{@[^}]+\\}"
+    },
+    "str-variable-local": {
+      "name": "variable.other.local.skript",
+      "match": "\\{_[^}]*\\}"
+    },
+    "str-variable-global": {
+      "name": "variable.other.global.skript",
+      "match": "\\{[^@_{}][^{}]*\\}"
+    },
+    "str-percent-escape": {
+      "comment": "%% is a literal percent sign (also how PlaceholderAPI placeholders are written)",
+      "name": "constant.character.escape.percent.skript",
+      "match": "%%"
+    },
+    "str-expression": {
+      "comment": "%expression% inside a string. Ends at the closing %, or before the string's closing quote / end of line so an unmatched % cannot swallow the rest of the file.",
+      "name": "variable.other.interpolation.skript",
+      "begin": "%",
+      "end": "%|(?=\")|$",
+      "patterns": [
+        {
+          "include": "#str-option"
+        },
+        {
+          "include": "#str-variable-local"
+        },
+        {
+          "include": "#str-variable-global"
+        },
+        {
+          "include": "#builtin-value"
+        },
+        {
+          "include": "#function-call"
+        },
+        {
+          "include": "#number"
+        }
+      ]
+    },
+    "mc-ampersand-escape": {
+      "name": "constant.character.escape.skript",
+      "match": "&&"
+    },
+    "control-flow": {
+      "name": "keyword.control.skript",
+      "match": "\\b(if|else if|else|while|loop|continue(?: loop)?|do while|wait|parse if|else parse if|parse else)\\b"
+    },
+    "effects": {
+      "name": "keyword.other.effect.skript",
+      "match": "\\b(set|add|remove(?: all)?|delete|clear|reset|give|take|send|broadcast|execute|spawn|kill|damage|heal|feed|teleport|push|apply|make|force|create|play(?: sound)?|drop|open|close|hide|show|equip|deposit|withdraw|enable|disable|toggle|increase|decrease|replace|enchant|disenchant|kick|ban|unban|op|deop|whitelist|dispatch)\\b"
+    },
+    "conditions": {
+      "name": "keyword.operator.word.skript",
+      "match": "\\b(is(?: not)?|are(?: not)?|isn't|aren't|were(?: not)?|weren't|contains?|does(?: not)? contain|doesn't contain|has|have|had|does(?: not)? have|doesn't have|can(?:not)?|can't|could|matches?|starts? with|ends? with|is between|is (?:greater|less) than(?: or equal to)?|(?:greater|less) than(?: or equal to)?|exists?|is set|is not set|is alive|is dead|is online|is offline|is flying|is sneaking|is sprinting|is swimming|is blocking|is sleeping|is empty|is full)\\b"
+    },
+    "logical": {
+      "name": "keyword.operator.logical.skript",
+      "match": "\\b(and|or|not|either|neither|nor|any|all|every|no(?:ne)?)\\b"
+    },
+    "boolean": {
+      "name": "constant.language.boolean.skript",
+      "match": "\\b(true|false|yes|no|on|off)\\b"
+    },
+    "null": {
+      "name": "constant.language.null.skript",
+      "match": "\\b(null|nothing|none|empty string|air)\\b"
+    },
+    "number": {
+      "name": "constant.numeric.skript",
+      "match": "\\b-?\\d+(?:\\.\\d+)?\\b"
+    },
+    "types": {
+      "name": "support.type.skript",
+      "match": "\\b(players|entity|entities|item|items|block|blocks|text|string|strings|integer|integers|number|numbers|boolean|booleans|world|worlds|location|locations|vector|vectors|uuid|chunk|chunks|slot|slots|inventory|inventories|living entity|living entities|creature|creatures|animal|animals|monster|monsters|projectile|projectiles|offline player|offline players|damage cause|enchantment|potion effect|color|sound|particle|time|timespan|date|direction|experience|money|level|gamemode)\\b"
+    },
+    "mc-codes": {
+      "comment": "Everything that can appear as Minecraft formatting: hex tags, && escape, colour regions, format regions, reset.",
+      "patterns": [
         {
           "include": "#mc-hex-toplevel"
         },
@@ -274,297 +526,392 @@
           "include": "#mc-white"
         },
         {
-          "include": "#mc-format"
+          "include": "#mc-bold"
+        },
+        {
+          "include": "#mc-italic"
+        },
+        {
+          "include": "#mc-underline"
+        },
+        {
+          "include": "#mc-strikethrough"
+        },
+        {
+          "include": "#mc-obfuscated"
+        },
+        {
+          "include": "#mc-reset"
+        },
+        {
+          "include": "#mc-tag"
         }
       ]
     },
-    "str-option": {
-      "name": "constant.other.option.skript",
-      "match": "\\{@[^}]+\\}"
-    },
-    "str-variable-local": {
-      "name": "variable.other.local.skript",
-      "match": "\\{_[^}]*\\}"
-    },
-    "str-variable-global": {
-      "name": "variable.other.global.skript",
-      "match": "\\{[^@_{}][^{}]*\\}"
-    },
-    "str-expression": {
-      "name": "variable.other.interpolation.skript",
-      "match": "%[^%]+%"
-    },
-    "mc-ampersand-escape": {
-      "name": "constant.character.escape.skript",
-      "match": "&&"
+    "mc-inner": {
+      "comment": "What may appear inside a colour/format region without ending it.",
+      "patterns": [
+        {
+          "include": "#str-option"
+        },
+        {
+          "include": "#str-variable-local"
+        },
+        {
+          "include": "#str-variable-global"
+        },
+        {
+          "include": "#str-percent-escape"
+        },
+        {
+          "include": "#str-expression"
+        },
+        {
+          "include": "#mc-ampersand-escape"
+        },
+        {
+          "include": "#mc-bold"
+        },
+        {
+          "include": "#mc-italic"
+        },
+        {
+          "include": "#mc-underline"
+        },
+        {
+          "include": "#mc-strikethrough"
+        },
+        {
+          "include": "#mc-obfuscated"
+        },
+        {
+          "include": "#mc-tag"
+        }
+      ]
     },
     "mc-black": {
-      "match": "(&0)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&0)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.black.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.black.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-dark-blue": {
-      "match": "(&1)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&1)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.dark-blue.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.dark-blue.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-dark-green": {
-      "match": "(&2)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&2)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.dark-green.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.dark-green.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-dark-aqua": {
-      "match": "(&3)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&3)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.dark-aqua.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.dark-aqua.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-dark-red": {
-      "match": "(&4)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&4)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.dark-red.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.dark-red.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-dark-purple": {
-      "match": "(&5)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&5)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.dark-purple.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.dark-purple.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-gold": {
-      "match": "(&6)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&6)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.gold.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.gold.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-gray": {
-      "match": "(&7)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&7)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.gray.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.gray.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-dark-gray": {
-      "match": "(&8)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&8)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.dark-gray.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.dark-gray.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-blue": {
-      "match": "(&9)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&9)",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.blue.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.blue.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-green": {
-      "match": "(&[aA])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&[aA])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.green.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.green.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-aqua": {
-      "match": "(&[bB])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&[bB])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.aqua.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.aqua.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-red": {
-      "match": "(&[cC])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&[cC])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.red.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.red.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-light-purple": {
-      "match": "(&[dD])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&[dD])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.light-purple.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.light-purple.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-yellow": {
-      "match": "(&[eE])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&[eE])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.yellow.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.yellow.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
     "mc-white": {
-      "match": "(&[fF])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
-      "captures": {
+      "begin": "(&[fF])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.skript"
-        },
-        "2": {
-          "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "3": {
-          "name": "markup.inline.mc.white.skript"
         }
-      }
+      },
+      "contentName": "markup.inline.mc.white.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
-    "mc-format": {
-      "comment": "Format-only codes with no preceding color (&l, &o, &n, &m, &k, &r)",
-      "match": "(&[lLoOnNmMkKrR])([^&\"%{<]*)",
-      "captures": {
+    "mc-bold": {
+      "begin": "(&[lL])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
         "1": {
           "name": "punctuation.definition.escape.minecraft.format.skript"
-        },
-        "2": {
-          "name": "markup.inline.mc.format.skript"
         }
-      }
+      },
+      "contentName": "markup.bold.mc.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
-    "control-flow": {
-      "name": "keyword.control.skript",
-      "match": "\\b(if|else if|else|while|loop|return|stop|exit(?: \\d+ (?:section|loop|trigger)s?)?|cancel(?: the)? event|continue|do while|wait)\\b"
+    "mc-italic": {
+      "begin": "(&[oO])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        }
+      },
+      "contentName": "markup.italic.mc.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
-    "effects": {
-      "name": "keyword.other.effect.skript",
-      "match": "\\b(set|add|remove(?: all)?|delete|clear|reset|give|take|send|broadcast|execute|spawn|kill|damage|heal|feed|teleport|push|apply|make|force|create|play(?: sound)?|drop|open|close|hide|show|equip|deposit|withdraw|enable|disable|toggle|increase|decrease|replace|enchant|disenchant|kick|ban|unban|op|deop|whitelist|dispatch)\\b"
+    "mc-underline": {
+      "begin": "(&[nN])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        }
+      },
+      "contentName": "markup.underline.mc.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
-    "conditions": {
-      "name": "keyword.operator.word.skript",
-      "match": "\\b(is(?: not)?|are(?: not)?|isn't|aren't|were(?: not)?|weren't|contains?|does(?: not)? contain|doesn't contain|has|have|had|does(?: not)? have|doesn't have|can(?:not)?|can't|could|matches?|starts? with|ends? with|is between|is (?:greater|less) than(?: or equal to)?|(?:greater|less) than(?: or equal to)?|exists?|is set|is not set|is alive|is dead|is online|is offline|is flying|is sneaking|is sprinting|is swimming|is blocking|is sleeping|is empty|is full)\\b"
+    "mc-strikethrough": {
+      "begin": "(&[mM])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        }
+      },
+      "contentName": "markup.strikethrough.mc.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
-    "logical": {
-      "name": "keyword.operator.logical.skript",
-      "match": "\\b(and|or|not|either|neither|nor|any|all|every|no(?:ne)?)\\b"
+    "mc-obfuscated": {
+      "begin": "(&[kK])",
+      "end": "(?=&[0-9a-fA-FrR]|&#[0-9a-fA-F]{6}|<##?[0-9a-fA-F]{6}>|<(?:reset|r)>|\")|$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        }
+      },
+      "contentName": "markup.obfuscated.mc.skript",
+      "patterns": [
+        {
+          "include": "#mc-inner"
+        }
+      ]
     },
-    "boolean": {
-      "name": "constant.language.boolean.skript",
-      "match": "\\b(true|false|yes|no|on|off)\\b"
+    "mc-reset": {
+      "name": "punctuation.definition.escape.minecraft.format.skript",
+      "match": "&[rR]"
     },
-    "null": {
-      "name": "constant.language.null.skript",
-      "match": "\\b(null|nothing|none|empty string|air)\\b"
-    },
-    "number": {
-      "name": "constant.numeric.skript",
-      "match": "\\b-?\\d+(?:\\.\\d+)?\\b"
-    },
-    "types": {
-      "name": "support.type.skript",
-      "match": "\\b(player|players|entity|entities|item|items|block|blocks|text|string|strings|integer|integers|number|numbers|boolean|booleans|world|worlds|location|locations|vector|vectors|uuid|chunk|chunks|slot|slots|inventory|inventories|living entity|living entities|creature|creatures|animal|animals|monster|monsters|projectile|projectiles|offline player|offline players|damage cause|enchantment|potion effect|color|sound|particle|time|timespan|date|direction|experience|money|level|gamemode)\\b"
+    "mc-tag": {
+      "comment": "Skript's named colour/format tags, e.g. <green>, <reset>, <bold>",
+      "name": "constant.character.escape.tag.skript",
+      "match": "<(?:reset|r|bold|b|italic|i|underline|u|strikethrough|s|magic|obfuscated|k|black|dark ?blue|dark ?green|dark ?aqua|dark ?cyan|dark ?red|dark ?purple|gold|orange|gr[ae]y|light ?gr[ae]y|dark ?gr[ae]y|blue|light ?blue|green|light ?green|lime|aqua|cyan|light ?cyan|red|light ?red|light ?purple|pink|magenta|yellow|white)>"
     }
   }
 }

@@ -1,18 +1,30 @@
 {
-	"name": "claude-skript",
-	"displayName": "PrimalMines Skript Tools",
-	"description": "Skript syntax highlighting, snippets, and variable IntelliSense for PrimalMinesCore development",
+	"name": "skript-extension",
+	"displayName": "Skript Tools",
+	"description": "Skript syntax highlighting, snippets, and variable IntelliSense for skript development",
 	"version": "1.1.0",
-	"publisher": "primalmines",
+	"publisher": "Findiepman",
 	"license": "MIT",
+	"icon": "icons/skript.png",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/primalmines/claude-skript-tools"
+		"url": "https://github.com/Findiepman/Skript-extension"
 	},
+	"bugs": {
+		"url": "https://github.com/Findiepman/Skript-extension/issues"
+	},
+	"homepage": "https://github.com/Findiepman/Skript-extension#readme",
+	"keywords": [
+		"skript",
+		"minecraft",
+		"skriptlang",
+		"spigot",
+		"paper"
+	],
 	"engines": {
-		"vscode": "^1.60.0"
+		"vscode": "^1.75.0"
 	},
-	"main": "./extension.js",
+	"main": "./src/index.js",
 	"activationEvents": [
 		"onLanguage:skript"
 	],
@@ -45,11 +57,84 @@
 				"path": "./syntaxes/skript.tmLanguage.json"
 			}
 		],
+		"snippets": [
+			{
+				"language": "skript",
+				"path": "./snippets/skript.json"
+			}
+		],
+		"themes": [
+			{
+				"label": "Skript Tools Dark",
+				"uiTheme": "vs-dark",
+				"path": "./themes/skript-tools-dark-color-theme.json"
+			}
+		],
 		"configurationDefaults": {
 			"[skript]": {
 				"editor.acceptSuggestionOnEnter": "off",
 				"editor.formatOnSave": true
 			}
+		},
+		"configuration": {
+			"title": "Skript Tools",
+			"properties": {
+				"skript.scan.glob": {
+					"type": "string",
+					"default": "**/*.sk",
+					"description": "Glob of files to index for variable and function IntelliSense. Changing it triggers a full rescan."
+				},
+				"skript.scan.exclude": {
+					"type": "string",
+					"default": "**/node_modules/**",
+					"description": "Glob of files to exclude from indexing. Changing it triggers a full rescan."
+				},
+				"skript.scan.includeDisabledFiles": {
+					"type": "boolean",
+					"default": true,
+					"description": "Index files whose name starts with \"-\" (Skript ignores them). When true their entries are marked \"(disabled)\"; when false they are not indexed at all."
+				},
+				"skript.diagnostics.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Report Skript problems (indentation, wait inside inventory click, undefined options, ...) in the Problems panel."
+				},
+				"skript.diagnostics.rules": {
+					"type": "object",
+					"default": {},
+					"description": "Per-rule toggles keyed by diagnostic code, e.g. { \"wait-in-inventory-click\": false }. Unlisted rules stay enabled.",
+					"additionalProperties": {
+						"type": "boolean"
+					}
+				},
+				"skript.diagnostics.knownFunctions": {
+					"type": "array",
+					"default": [],
+					"description": "Function names defined outside the workspace (addons, other servers) that diagnostics should treat as defined.",
+					"items": {
+						"type": "string"
+					}
+				},
+				"skript.format.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Register the reindent-on-save formatter for Skript files. Disable to keep your own formatter."
+				},
+				"skript.completion.preselectVariables": {
+					"type": "boolean",
+					"default": false,
+					"description": "Preselect the closest matching variable in the {…} completion list so Enter accepts it immediately."
+				}
+			}
 		}
+	},
+	"scripts": {
+		"test": "node --test \"test/*.test.js\"",
+		"test:grammar": "vscode-tmgrammar-test -g syntaxes/skript.tmLanguage.json \"test/grammar/*.test.sk\"",
+		"test:editor": "node test/editor/runTest.js"
+	},
+	"devDependencies": {
+		"@vscode/test-electron": "^3.1.0",
+		"vscode-tmgrammar-test": "^0.1.3"
 	}
 }

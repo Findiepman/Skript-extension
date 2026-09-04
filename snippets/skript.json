@@ -1,0 +1,342 @@
+{
+  "send": {
+    "prefix": "send",
+    "body": ["send \"${1:message}\" to ${2:player}"],
+    "description": "Send message to player"
+  },
+  "send actionbar": {
+    "prefix": "send actionbar",
+    "body": ["send actionbar \"${1:message}\" to ${2:player}"],
+    "description": "Send actionbar message"
+  },
+  "send title": {
+    "prefix": "send title",
+    "body": ["send title \"${1:title}\" with subtitle \"${2:subtitle}\" to ${3:player} for ${4:3} seconds"],
+    "description": "Send title + subtitle"
+  },
+  "broadcast": {
+    "prefix": "broadcast",
+    "body": ["broadcast \"${1:message}\""],
+    "description": "Broadcast message"
+  },
+  "set": {
+    "prefix": "set",
+    "body": ["set {${1:var}} to ${2:value}"],
+    "description": "Set variable"
+  },
+  "add to": {
+    "prefix": "add to",
+    "body": ["add ${1:1} to {${2:var}}"],
+    "description": "Add to variable"
+  },
+  "remove from": {
+    "prefix": "remove from",
+    "body": ["remove ${1:1} from {${2:var}}"],
+    "description": "Remove from variable"
+  },
+  "delete": {
+    "prefix": "delete",
+    "body": ["delete {${1:var}}"],
+    "description": "Delete variable"
+  },
+  "give": {
+    "prefix": "give",
+    "body": ["give ${1:player} ${2:1} of ${3:diamond}"],
+    "description": "Give item to player"
+  },
+  "teleport": {
+    "prefix": "teleport",
+    "body": ["teleport ${1:player} to ${2:location}"],
+    "description": "Teleport entity"
+  },
+  "execute console command": {
+    "prefix": "execute console command",
+    "body": ["execute console command \"${1:command}\""],
+    "description": "Run console command"
+  },
+  "execute player command": {
+    "prefix": "execute player command",
+    "body": ["make ${1:player} execute command \"/${2:command}\""],
+    "description": "Run command as player"
+  },
+  "play sound": {
+    "prefix": "play sound",
+    "body": ["play sound \"${1:block.note_block.bell}\" with volume ${2:1} with pitch ${3:0.9} at ${4:player} for ${5:player}"],
+    "description": "Play sound to player"
+  },
+  "wait": {
+    "prefix": "wait",
+    "body": ["wait ${1:1} ${2|second,seconds,tick,ticks|}"],
+    "description": "Wait duration"
+  },
+  "cancel event": {
+    "prefix": "cancel event",
+    "body": ["cancel event"],
+    "description": "Cancel the event"
+  },
+  "open chest": {
+    "prefix": "open chest",
+    "body": ["open chest with ${1:3} rows named \"${2:Menu}\" to ${3:player}"],
+    "description": "Open chest GUI"
+  },
+  "apply": {
+    "prefix": "apply",
+    "body": ["apply ${1:speed} ${2:1} to ${3:player} for ${4:30} seconds"],
+    "description": "Apply potion effect"
+  },
+  "spawn": {
+    "prefix": "spawn",
+    "body": ["spawn ${1:zombie} at ${2:location}"],
+    "description": "Spawn entity"
+  },
+  "kill": {
+    "prefix": "kill",
+    "body": ["kill ${1:entity}"],
+    "description": "Kill entity"
+  },
+  "damage": {
+    "prefix": "damage",
+    "body": ["damage ${1:player} by ${2:5} hearts"],
+    "description": "Damage entity"
+  },
+  "heal": {
+    "prefix": "heal",
+    "body": ["heal ${1:player} by ${2:5} hearts"],
+    "description": "Heal entity"
+  },
+  "feed": {
+    "prefix": "feed",
+    "body": ["feed ${1:player}"],
+    "description": "Feed player"
+  },
+  "close inventory": {
+    "prefix": "close inventory",
+    "body": ["close ${1:player}'s inventory"],
+    "description": "Close player inventory"
+  },
+  "drop": {
+    "prefix": "drop",
+    "body": ["drop ${1:1} of ${2:diamond} at ${3:location}"],
+    "description": "Drop item"
+  },
+  "push": {
+    "prefix": "push",
+    "body": ["push ${1:player} ${2:forwards} at speed ${3:1}"],
+    "description": "Push entity"
+  },
+  "replace": {
+    "prefix": "replace",
+    "body": ["replace all \"${1:find}\" in {_${2:text}} with \"${3:replace}\""],
+    "description": "Replace in text"
+  },
+
+  "if": {
+    "prefix": "if",
+    "body": ["if ${1:condition}:", "\t${2}"],
+    "description": "If statement"
+  },
+  "else if": {
+    "prefix": "else if",
+    "body": ["else if ${1:condition}:", "\t${2}"],
+    "description": "Else if branch"
+  },
+  "else": {
+    "prefix": "else",
+    "body": ["else:", "\t${1}"],
+    "description": "Else branch"
+  },
+  "loop": {
+    "prefix": "loop",
+    "body": ["loop ${1:all players}:", "\t${2:loop-value}"],
+    "description": "Loop"
+  },
+  "loop times": {
+    "prefix": "loop times",
+    "body": ["loop ${1:10} times:", "\t${2}"],
+    "description": "Loop N times"
+  },
+  "while": {
+    "prefix": "while",
+    "body": ["while ${1:condition}:", "\t${2}", "\twait 1 tick"],
+    "description": "While loop"
+  },
+  "exit loop": {
+    "prefix": "exit loop",
+    "body": ["exit loop"],
+    "description": "Exit the innermost loop"
+  },
+  "stop": {
+    "prefix": "stop",
+    "body": ["stop"],
+    "description": "Stop the trigger"
+  },
+
+  "command": {
+    "prefix": "command",
+    "body": ["command /${1:name} ${2:<text>}:", "\ttrigger:", "\t\t${3}"],
+    "description": "Command definition"
+  },
+  "on event": {
+    "prefix": "on event",
+    "body": ["on ${1:join}:", "\t${2}"],
+    "description": "Event handler"
+  },
+  "function": {
+    "prefix": "function",
+    "body": ["function ${1:name}(${2:p: player})${3: :: text}:", "\t${4}"],
+    "description": "Function definition"
+  },
+  "options": {
+    "prefix": "options",
+    "body": ["options:", "\t${1:prefix}: ${2:value}"],
+    "description": "Options block"
+  },
+  "at time": {
+    "prefix": "at time",
+    "body": ["at ${1:18:00}:", "\t${2}"],
+    "description": "Run at a Minecraft world time every day"
+  },
+  "every duration": {
+    "prefix": "every duration",
+    "body": ["every ${1:5} ${2|minutes,seconds,ticks,hours|}:", "\t${3}"],
+    "description": "Periodic trigger (real time)"
+  },
+
+  "on join": {
+    "prefix": "on join",
+    "body": ["on join:", "\t${1}"],
+    "description": "Player join event"
+  },
+  "on quit": {
+    "prefix": "on quit",
+    "body": ["on quit:", "\t${1}"],
+    "description": "Player quit event"
+  },
+  "on break": {
+    "prefix": "on break",
+    "body": ["on break:", "\t${1}"],
+    "description": "Block break event"
+  },
+  "on place": {
+    "prefix": "on place",
+    "body": ["on place:", "\t${1}"],
+    "description": "Block place event"
+  },
+  "on right click": {
+    "prefix": "on right click",
+    "body": ["on right click:", "\t${1}"],
+    "description": "Right click event"
+  },
+  "on inventory click": {
+    "prefix": "on inventory click",
+    "body": ["on inventory click:", "\tcancel event", "\t${1}"],
+    "description": "Inventory click event"
+  },
+  "on death": {
+    "prefix": "on death",
+    "body": ["on death of ${1:player}:", "\t${2}"],
+    "description": "Death event"
+  },
+  "on respawn": {
+    "prefix": "on respawn",
+    "body": ["on respawn:", "\t${1}"],
+    "description": "Respawn event"
+  },
+  "on chat": {
+    "prefix": "on chat",
+    "body": ["on chat:", "\t${1}"],
+    "description": "Chat event"
+  },
+  "on damage": {
+    "prefix": "on damage",
+    "body": ["on damage:", "\t${1}"],
+    "description": "Damage event"
+  },
+  "on load": {
+    "prefix": "on load",
+    "body": ["on load:", "\t${1}"],
+    "description": "Script load event"
+  },
+
+  "if player has permission": {
+    "prefix": "if player has permission",
+    "body": ["if ${1:player} has permission \"${2:perm.node}\":", "\t${3}"],
+    "description": "Permission check"
+  },
+  "if player is op": {
+    "prefix": "if player is op",
+    "body": ["if ${1:player} is op:", "\t${2}"],
+    "description": "Op check"
+  },
+  "if is set": {
+    "prefix": "if is set",
+    "body": ["if {${1:var}} is set:", "\t${2}"],
+    "description": "Variable is set check"
+  },
+  "if is not set": {
+    "prefix": "if is not set",
+    "body": ["if {${1:var}} is not set:", "\t${2}"],
+    "description": "Variable not set check"
+  },
+  "if inventory can hold": {
+    "prefix": "if inventory can hold",
+    "body": ["if ${1:player}'s inventory can hold ${2:item}:", "\t${3}"],
+    "description": "Inventory space check"
+  },
+
+  "talking lock": {
+    "prefix": "talking lock",
+    "body": [
+      "if {npc::talking::%${1:player}%} is set:",
+      "\tstop",
+      "set {npc::talking::%${1:player}%} to true",
+      "${2:# dialogue}",
+      "delete {npc::talking::%${1:player}%}"
+    ],
+    "description": "NPC talking lock: prevents dialogue spam while a conversation runs"
+  },
+  "stash fallback": {
+    "prefix": "stash fallback",
+    "body": [
+      "if ${1:player}'s inventory cannot hold ${2:{_item\\}}:",
+      "\tadd ${2:{_item\\}} to {stash::%${1:player}'s uuid%::*}",
+      "\tsend \"&6&lStash &eCould not pick item up! Collect it in /stash.\" to ${1:player}",
+      "else:",
+      "\tgive ${1:player} ${2:{_item\\}}"
+    ],
+    "description": "Give an item, falling back to /stash when the inventory is full"
+  },
+  "giveSlayerItem": {
+    "prefix": "giveSlayerItem",
+    "body": ["giveSlayerItem(${1:{_a\\}}, ${2:1} of {boss::item::${3:pollum}::${4:shard}})"],
+    "description": "Stash-safe slayer item give (bosses/helpers.sk)"
+  },
+  "rollDrop else-if chain": {
+    "prefix": "rollDrop else-if chain",
+    "body": [
+      "if rollDrop(${1:{_a\\}}, ${2:1}):",
+      "\tgiveSlayerItem(${1:{_a\\}}, 1 of {boss::item::${3:pollum}::pet})",
+      "else if rollDrop(${1:{_a\\}}, ${4:10}):",
+      "\tgiveSlayerItem(${1:{_a\\}}, 1 of {boss::item::${3:pollum}::${5:axe}})",
+      "else if rollDrop(${1:{_a\\}}, ${6:30}):",
+      "\tgiveSlayerItem(${1:{_a\\}}, random integer between 1 and 3 of {boss::item::${3:pollum}::shard})",
+      "else if rollDrop(${1:{_a\\}}, ${7:60}):",
+      "\tadd ${8:5000} to ${1:{_a\\}}'s balance"
+    ],
+    "description": "Rarest-first boss drop chain: only one drop per kill, Plunder-aware"
+  },
+  "updateNPCVisibility": {
+    "prefix": "updateNPCVisibility",
+    "body": ["updateNPCVisibility(${1:player})"],
+    "description": "Refresh per-player NPC visibility after a quest stage change"
+  },
+  "doc-comment": {
+    "prefix": "doc-comment",
+    "body": [
+      "#d ${1:What the function does.}",
+      "#dp ${2:p} ${3:what the parameter is}",
+      "#dr ${4:what is returned}"
+    ],
+    "description": "Function doc-comment block (#d description, #dp name text, #dr return)"
+  }
+}
