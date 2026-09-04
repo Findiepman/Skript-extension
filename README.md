@@ -1,4 +1,4 @@
-# PrimalMines Skript Tools
+# Skript Extension
 
 Skript (`.sk`) language support for VS Code: syntax highlighting, a snippet library, and workspace-aware `{variable}` IntelliSense.
 
