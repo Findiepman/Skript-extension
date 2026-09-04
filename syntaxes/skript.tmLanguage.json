@@ -1,0 +1,570 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Skript",
+  "scopeName": "source.skript",
+  "fileTypes": [
+    "sk"
+  ],
+  "patterns": [
+    {
+      "include": "#mc-hex-toplevel"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#top-section"
+    },
+    {
+      "include": "#section-property"
+    },
+    {
+      "include": "#option-ref"
+    },
+    {
+      "include": "#string"
+    },
+    {
+      "include": "#variable-local"
+    },
+    {
+      "include": "#variable-global"
+    },
+    {
+      "include": "#mc-ampersand-escape"
+    },
+    {
+      "include": "#mc-black"
+    },
+    {
+      "include": "#mc-dark-blue"
+    },
+    {
+      "include": "#mc-dark-green"
+    },
+    {
+      "include": "#mc-dark-aqua"
+    },
+    {
+      "include": "#mc-dark-red"
+    },
+    {
+      "include": "#mc-dark-purple"
+    },
+    {
+      "include": "#mc-gold"
+    },
+    {
+      "include": "#mc-gray"
+    },
+    {
+      "include": "#mc-dark-gray"
+    },
+    {
+      "include": "#mc-blue"
+    },
+    {
+      "include": "#mc-green"
+    },
+    {
+      "include": "#mc-aqua"
+    },
+    {
+      "include": "#mc-red"
+    },
+    {
+      "include": "#mc-light-purple"
+    },
+    {
+      "include": "#mc-yellow"
+    },
+    {
+      "include": "#mc-white"
+    },
+    {
+      "include": "#mc-format"
+    },
+    {
+      "include": "#control-flow"
+    },
+    {
+      "include": "#effects"
+    },
+    {
+      "include": "#conditions"
+    },
+    {
+      "include": "#logical"
+    },
+    {
+      "include": "#boolean"
+    },
+    {
+      "include": "#null"
+    },
+    {
+      "include": "#number"
+    },
+    {
+      "include": "#types"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.number-sign.skript",
+      "match": "#(?!#[0-9a-fA-F]{6}).*$"
+    },
+    "mc-hex-toplevel": {
+      "patterns": [
+        {
+          "name": "constant.character.escape.hex.skript",
+          "match": "<##[0-9a-fA-F]{6}>"
+        },
+        {
+          "name": "constant.character.escape.hex.skript",
+          "match": "&#[0-9a-fA-F]{6}"
+        }
+      ]
+    },
+    "top-section": {
+      "patterns": [
+        {
+          "comment": "on <event>:",
+          "match": "^(on)\\s+(.+?)(?=\\s*:)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.event.skript"
+            },
+            "2": {
+              "name": "entity.name.type.event.skript"
+            }
+          }
+        },
+        {
+          "comment": "command /name [<args>]:",
+          "match": "^(command)\\s+(/[\\w-]+)((?:\\s+(?:<[^>]*>|\\[[^\\]]*\\]))*)",
+          "captures": {
+            "1": {
+              "name": "keyword.other.command.skript"
+            },
+            "2": {
+              "name": "entity.name.function.command.skript"
+            },
+            "3": {
+              "name": "variable.parameter.skript"
+            }
+          }
+        },
+        {
+          "comment": "function name(params):",
+          "match": "^(function)\\s+(\\w+)(\\([^)]*\\))",
+          "captures": {
+            "1": {
+              "name": "keyword.other.function-def.skript"
+            },
+            "2": {
+              "name": "entity.name.function.skript"
+            },
+            "3": {
+              "name": "variable.parameter.skript"
+            }
+          }
+        },
+        {
+          "comment": "top-level section keywords",
+          "match": "^(options|variables|aliases|permissions)\\s*:",
+          "captures": {
+            "1": {
+              "name": "keyword.other.section.skript"
+            }
+          }
+        }
+      ]
+    },
+    "section-property": {
+      "comment": "Command/function property keywords. Longer variants before shorter to avoid partial match.",
+      "match": "^\\s+(permission message|permission bypass|permission|cooldown message|cooldown bypass|cooldown storage|cooldown|executable by|default value|trigger|aliases|usage|description)\\s*:",
+      "captures": {
+        "1": {
+          "name": "support.type.property.skript"
+        }
+      }
+    },
+    "option-ref": {
+      "name": "constant.other.option.skript",
+      "match": "\\{@[^}]+\\}"
+    },
+    "variable-local": {
+      "name": "variable.other.local.skript",
+      "match": "\\{_[^}]*\\}"
+    },
+    "variable-global": {
+      "name": "variable.other.global.skript",
+      "match": "\\{[^@_{}][^{}]*\\}"
+    },
+    "string": {
+      "name": "string.quoted.double.skript",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#str-option"
+        },
+        {
+          "include": "#str-variable-local"
+        },
+        {
+          "include": "#str-variable-global"
+        },
+        {
+          "include": "#str-expression"
+        },
+        {
+          "include": "#mc-hex-toplevel"
+        },
+        {
+          "include": "#mc-ampersand-escape"
+        },
+        {
+          "include": "#mc-black"
+        },
+        {
+          "include": "#mc-dark-blue"
+        },
+        {
+          "include": "#mc-dark-green"
+        },
+        {
+          "include": "#mc-dark-aqua"
+        },
+        {
+          "include": "#mc-dark-red"
+        },
+        {
+          "include": "#mc-dark-purple"
+        },
+        {
+          "include": "#mc-gold"
+        },
+        {
+          "include": "#mc-gray"
+        },
+        {
+          "include": "#mc-dark-gray"
+        },
+        {
+          "include": "#mc-blue"
+        },
+        {
+          "include": "#mc-green"
+        },
+        {
+          "include": "#mc-aqua"
+        },
+        {
+          "include": "#mc-red"
+        },
+        {
+          "include": "#mc-light-purple"
+        },
+        {
+          "include": "#mc-yellow"
+        },
+        {
+          "include": "#mc-white"
+        },
+        {
+          "include": "#mc-format"
+        }
+      ]
+    },
+    "str-option": {
+      "name": "constant.other.option.skript",
+      "match": "\\{@[^}]+\\}"
+    },
+    "str-variable-local": {
+      "name": "variable.other.local.skript",
+      "match": "\\{_[^}]*\\}"
+    },
+    "str-variable-global": {
+      "name": "variable.other.global.skript",
+      "match": "\\{[^@_{}][^{}]*\\}"
+    },
+    "str-expression": {
+      "name": "variable.other.interpolation.skript",
+      "match": "%[^%]+%"
+    },
+    "mc-ampersand-escape": {
+      "name": "constant.character.escape.skript",
+      "match": "&&"
+    },
+    "mc-black": {
+      "match": "(&0)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.black.skript"
+        }
+      }
+    },
+    "mc-dark-blue": {
+      "match": "(&1)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.dark-blue.skript"
+        }
+      }
+    },
+    "mc-dark-green": {
+      "match": "(&2)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.dark-green.skript"
+        }
+      }
+    },
+    "mc-dark-aqua": {
+      "match": "(&3)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.dark-aqua.skript"
+        }
+      }
+    },
+    "mc-dark-red": {
+      "match": "(&4)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.dark-red.skript"
+        }
+      }
+    },
+    "mc-dark-purple": {
+      "match": "(&5)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.dark-purple.skript"
+        }
+      }
+    },
+    "mc-gold": {
+      "match": "(&6)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.gold.skript"
+        }
+      }
+    },
+    "mc-gray": {
+      "match": "(&7)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.gray.skript"
+        }
+      }
+    },
+    "mc-dark-gray": {
+      "match": "(&8)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.dark-gray.skript"
+        }
+      }
+    },
+    "mc-blue": {
+      "match": "(&9)((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.blue.skript"
+        }
+      }
+    },
+    "mc-green": {
+      "match": "(&[aA])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.green.skript"
+        }
+      }
+    },
+    "mc-aqua": {
+      "match": "(&[bB])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.aqua.skript"
+        }
+      }
+    },
+    "mc-red": {
+      "match": "(&[cC])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.red.skript"
+        }
+      }
+    },
+    "mc-light-purple": {
+      "match": "(&[dD])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.light-purple.skript"
+        }
+      }
+    },
+    "mc-yellow": {
+      "match": "(&[eE])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.yellow.skript"
+        }
+      }
+    },
+    "mc-white": {
+      "match": "(&[fF])((?:&[lLoOnNmMkK])*)([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.skript"
+        },
+        "2": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "3": {
+          "name": "markup.inline.mc.white.skript"
+        }
+      }
+    },
+    "mc-format": {
+      "comment": "Format-only codes with no preceding color (&l, &o, &n, &m, &k, &r)",
+      "match": "(&[lLoOnNmMkKrR])([^&\"%{<]*)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.escape.minecraft.format.skript"
+        },
+        "2": {
+          "name": "markup.inline.mc.format.skript"
+        }
+      }
+    },
+    "control-flow": {
+      "name": "keyword.control.skript",
+      "match": "\\b(if|else if|else|while|loop|return|stop|exit(?: \\d+ (?:section|loop|trigger)s?)?|cancel(?: the)? event|continue|do while|wait)\\b"
+    },
+    "effects": {
+      "name": "keyword.other.effect.skript",
+      "match": "\\b(set|add|remove(?: all)?|delete|clear|reset|give|take|send|broadcast|execute|spawn|kill|damage|heal|feed|teleport|push|apply|make|force|create|play(?: sound)?|drop|open|close|hide|show|equip|deposit|withdraw|enable|disable|toggle|increase|decrease|replace|enchant|disenchant|kick|ban|unban|op|deop|whitelist|dispatch)\\b"
+    },
+    "conditions": {
+      "name": "keyword.operator.word.skript",
+      "match": "\\b(is(?: not)?|are(?: not)?|isn't|aren't|were(?: not)?|weren't|contains?|does(?: not)? contain|doesn't contain|has|have|had|does(?: not)? have|doesn't have|can(?:not)?|can't|could|matches?|starts? with|ends? with|is between|is (?:greater|less) than(?: or equal to)?|(?:greater|less) than(?: or equal to)?|exists?|is set|is not set|is alive|is dead|is online|is offline|is flying|is sneaking|is sprinting|is swimming|is blocking|is sleeping|is empty|is full)\\b"
+    },
+    "logical": {
+      "name": "keyword.operator.logical.skript",
+      "match": "\\b(and|or|not|either|neither|nor|any|all|every|no(?:ne)?)\\b"
+    },
+    "boolean": {
+      "name": "constant.language.boolean.skript",
+      "match": "\\b(true|false|yes|no|on|off)\\b"
+    },
+    "null": {
+      "name": "constant.language.null.skript",
+      "match": "\\b(null|nothing|none|empty string|air)\\b"
+    },
+    "number": {
+      "name": "constant.numeric.skript",
+      "match": "\\b-?\\d+(?:\\.\\d+)?\\b"
+    },
+    "types": {
+      "name": "support.type.skript",
+      "match": "\\b(player|players|entity|entities|item|items|block|blocks|text|string|strings|integer|integers|number|numbers|boolean|booleans|world|worlds|location|locations|vector|vectors|uuid|chunk|chunks|slot|slots|inventory|inventories|living entity|living entities|creature|creatures|animal|animals|monster|monsters|projectile|projectiles|offline player|offline players|damage cause|enchantment|potion effect|color|sound|particle|time|timespan|date|direction|experience|money|level|gamemode)\\b"
+    }
+  }
+}
